@@ -12,6 +12,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/jfreymuth/pulse"
+	"github.com/samuel/go-dsp/dsp"
 	"github.com/samuel/go-hackrf/hackrf"
 )
 
@@ -20,6 +22,8 @@ var (
 	FlagLearn = flag.String("learn", "", "learn a point")
 	// FlagInfer
 	FlagInfer = flag.Bool("infer", false, "inference mode")
+	// FlagRadio
+	FlagRadio = flag.Bool("radio", false, "radio mode")
 )
 
 // Point is a point
@@ -44,7 +48,68 @@ func main() {
 		panic(err)
 	}
 	fmt.Println("Device opened")
-	device.SetFreq(1e6)
+
+	if *FlagRadio {
+		c, err := pulse.NewClient()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		defer c.Close()
+
+		err = device.SetFreq(96.7e6)
+		if err != nil {
+			panic(err)
+		}
+		demod := dsp.FMDemodFilter{}
+		err = device.StartRX(func(buffer []byte) error {
+			iq := make([]complex64, len(buffer)/2)
+			for i := range iq {
+				iq[i] = complex(float32(buffer[2*i])/128.0, float32(buffer[2*i+1])/128.0)
+			}
+			audio := make([]float32, len(iq))
+			demod.Demodulate(iq, audio)
+			index := 0
+			synth := func(out []float32) (int, error) {
+				for i := range out {
+					out[i] = audio[index]
+					index++
+					if index >= len(audio) {
+						return i, pulse.EndOfData
+					}
+				}
+				return len(out), nil
+			}
+			stream, err := c.NewPlayback(pulse.Float32Reader(synth), pulse.PlaybackLatency(.1))
+			if err != nil {
+				panic(err)
+			}
+
+			stream.Start()
+			stream.Drain()
+			fmt.Println("Underflow:", stream.Underflow())
+			if stream.Error() != nil {
+				fmt.Println("Error:", stream.Error())
+			}
+			stream.Close()
+			return nil
+		})
+		if err != nil {
+			panic(err)
+		}
+		for {
+			time.Sleep(1 * time.Second)
+		}
+	}
+
+	err = device.SetFreq(1e6)
+	if err != nil {
+		panic(err)
+	}
+	err = device.SetVGAGain(20)
+	if err != nil {
+		panic(err)
+	}
 	defer device.Close()
 
 	input, err := os.Open("points.gob")

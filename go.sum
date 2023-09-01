@@ -1,2 +1,10 @@
+github.com/jfreymuth/pulse v0.1.0 h1:KN38/9hoF9PJvP5DpEVhMRKNuwnJUonc8c9ARorRXUA=
+github.com/jfreymuth/pulse v0.1.0/go.mod h1:cpYspI6YljhkUf1WLXLLDmeaaPFc3CnGLjDZf9dZ4no=
+github.com/lawl/pulseaudio v0.0.0-20220626105240-976bed5e247c h1:j96x2SroUFS59ENzG7vI5n/hJ79qDYv8/MJ7pumgJCk=
+github.com/lawl/pulseaudio v0.0.0-20220626105240-976bed5e247c/go.mod h1:9h36x4KH7r2V8DOCKoPMt87IXZ++X90y8D5nnuwq290=
+github.com/samuel/go-dsp v0.0.0-20180112204629-3ce1907a4765 h1:zrZCranmm80lTW7bb6sZ3JaT6YV1VlsRG4LDkGGdIn8=
+github.com/samuel/go-dsp v0.0.0-20180112204629-3ce1907a4765/go.mod h1:Zfx80ewpAiSf7qZNjwsTKSFli04lrKDE6tm6P98Bx5Q=
 github.com/samuel/go-hackrf v0.0.0-20171108215759-68a81b40b34d h1:krarXX6jj5JSXpVN9XKuGBWKpj16a6/15F5eHcPUfao=
 github.com/samuel/go-hackrf v0.0.0-20171108215759-68a81b40b34d/go.mod h1:Ic/cHK689ENkRnl+Z0Ic2BnVzk2CYpBNucaYq64ofUQ=
+mrogalski.eu/go/pulseaudio v0.0.0-20200511091429-8449222912dd h1:yEN6CTPZV70rUFqpZ5SqJn15JK5iKiSL4Gdw2gJ98ug=
+mrogalski.eu/go/pulseaudio v0.0.0-20200511091429-8449222912dd/go.mod h1:C3V0v+gsiHHbMtFJvwozjNVdPJZw9oUxlRTVc619wSU=
